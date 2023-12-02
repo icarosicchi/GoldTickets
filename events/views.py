@@ -76,6 +76,17 @@ def search_events(request):
         context = {"event_list": event_list}
     return render(request, 'events/search.html', context)
 
+def search(request):
+    query = request.GET.get('searched', '')
+    events = Event.objects.filter(name__icontains=query)
+    categories = Category.objects.filter(name__icontains=query)
+    context = {
+        'query': query,
+        'events': events,
+        'categories': categories,
+    }
+    return render(request, 'events/search.html', context)
+
 def create_comment(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     if request.method == 'POST':

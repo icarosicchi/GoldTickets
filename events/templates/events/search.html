@@ -3,17 +3,31 @@
 {% block content %}
 
 <h2>Resultado da Busca</h2>
-{% if event_list %}
-<section class="lista-de-cards">
-    {% for event in event_list %}
-    <article class="card">
-        <img src="{{ event.photo_url }}" alt="Foto do evento {{ event.name}}">
-        <p>{{ event.name }} ({{ event.event_date }})</p>
-    </article>
-    {% endfor %}
-</section>
+<p>Mostrando resultados para: "{{ query }}"</p>
+{% if events %}
+    <section class="lista-de-cards">
+        {% for event in events %}
+            <article class="card">
+                <a href="{% url 'events:detail' event.id %}"
+                ><img src="{{ event.photo_url }}" alt="Foto do evento {{ event.name}}"
+                /></a>
+                <p>{{ event.name }} ({{ event.event_date }})</p>
+            </article>
+        {% endfor %}
+    </section>
 {% else %}
-<p>Não foi encontrado nenhum evento para a busca.</p>
+    <p>Não foi encontrado nenhum evento para a busca.</p>
+{% endif %}
+{% if categories %}
+    {% for category in categories %}
+        <article class="card">
+            <a href="{% url 'events:detail-category' category.id %}">
+                <p>{{ category.name }}</p>
+            </a>
+        </article>
+    {% endfor %}
+{% else %}
+    <p>Não foi encontrado nenhuma categoria para a busca.</p>
 {% endif %}
 
 {% endblock content %}

@@ -21,9 +21,9 @@
         <nav id="navegacao-principal">
             <ul>
                 <li><a href="{% url 'events:categories' %}">Categorias</a></li>
-                <form role="search" method="POST" action="{% url 'events:search' %}">
+                <form role="search" method="GET" action="{% url 'events:search' %}">
                 {% csrf_token %}
-                <input type="search" size="30" placeholder="Buscar Evento" aria-label="Search" name="searched">
+                <input type="search" size="30" placeholder="Buscar" aria-label="Search" name="searched">
                 </form>
                 {% if user.is_authenticated %}
                     <li style="width: 10vw;" style="display: inline-block;" > Logado com {{ user.username }} </li>
