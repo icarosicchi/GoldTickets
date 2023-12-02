@@ -58,13 +58,13 @@
     width: 70%;
     list-style: none;
     padding: 0;
-    margin: 5vh;
     display: flex;
     align-items: center;
 }
 
 #navegacao-principal li {
     width: 70%;
+    margin: 2vw;
     padding: 10px;
 }
 
@@ -232,8 +232,4 @@
     width: 10vw; 
     padding: 10px;
     box-sizing: border-box;
-}
-
-#navegacao-principal li:last-child {
-    margin-right: 0; 
 }

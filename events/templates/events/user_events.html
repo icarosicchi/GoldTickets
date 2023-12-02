@@ -1,0 +1,23 @@
+<!-- user_events.html -->
+{% extends 'base.html' %} 
+{% block title %}
+  Meus Eventos
+{% endblock title %}
+{% block content %}
+  <h2>Meus Eventos</h2>
+
+{% if user_events %}
+<section class="lista-de-cards">
+  {% for event in user_events %}
+  <article class="card">
+    <a href="{% url 'events:detail' event.id %}"
+      ><img src="{{ event.photo_url }}" alt="Foto do evento {{ event.name }}"
+    /></a>
+    <p>{{ event.name }} ({{ event.event_date }})</p>
+  </article>
+  {% endfor %}
+</section>
+{% else %}
+<p>Não foi encontrado nenhum evento.</p>
+{% endif %}
+{% endblock content %}

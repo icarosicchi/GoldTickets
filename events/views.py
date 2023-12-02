@@ -37,6 +37,14 @@ class EventDetailView(generic.DetailView):
             comments = event.comments.all().order_by('-pub_date')
             return render(request, 'events/detail.html', {'event': event, 'comments': comments, 'form': form})
 
+def user_events(request):
+    if request.user.is_authenticated:
+        user_events = Event.objects.filter(author_id=request.user.id)
+        context = {'user_events': user_events}
+        return render(request, 'events/user_events.html', context)
+    else:
+        return render(request, 'events/login_required.html')
+    
 class EventCreateView(generic.CreateView):
     model = Event
     template_name = 'events/create.html'
@@ -59,13 +67,13 @@ class EventCreateView(generic.CreateView):
 class EventUpdateView(generic.UpdateView):
     model = Event
     template_name = 'events/update.html'
-    # success_url = reverse_lazy('events:index')
+    success_url = reverse_lazy('events:index')
     form_class = EventForm
 
 class EventDeleteView(generic.DeleteView):
     model = Event
     template_name = 'events/delete.html'
-    # success_url = reverse_lazy('events:index')
+    success_url = reverse_lazy('events:index')
     form_class = EventForm
 
 def search_events(request):

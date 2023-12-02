@@ -28,8 +28,9 @@
                 {% if user.is_authenticated %}
                     <li style="width: 10vw;" style="display: inline-block;" > Logado com {{ user.username }} </li>
                     <li><a href="{% url 'logout' %}">Logout</a></li>
+                    <li><a href="{% url 'events:user_events' %}">Meus eventos</a></li>
                 {% else %}
-                    <li></listyle><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
                 {% endif %}
             </ul>
           </nav>

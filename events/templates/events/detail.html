@@ -23,15 +23,23 @@
       <li> <a href="{% url 'events:detail-category' category.id %}">-> {{ category.name }}</a></li>
       {% endfor %}
     {% endif %}
-    {% if user.is_authenticated and user.id == event.author_id %}
-    <hr>
-      <li><a href="{% url 'events:update' event.id %}">Editar</a></li>
-      <li><a href="{% url 'events:delete' event.id %}">Apagar</a></li>
-    {% endif %}
   </ul>
 </section>
+{% if user.is_authenticated and user.id == event.author_id %}
 
+    <li style="display: inline-block; margin-right: 10px;">
+        <a href="{% url 'events:update' event.id %}">
+            <strong style="font-size: 18px;">Editar</strong>
+        </a>
+    </li>
+    <li style="display: inline-block;">
+        <a href="{% url 'events:delete' event.id %}">
+          <strong style="font-size: 18px;">Apagar</strong>
+        </a>
+    </li>
+{% endif %}
 <section>
+<hr>
   <header>
       <h3>Comentários</h3>
   </header>
@@ -49,10 +57,10 @@
           <p>Ainda não existe nenhum comentário para este filme.</p>
       {% endif %}
   </ul>
-
+  {% if user.is_authenticated and event.author_id != user.id %}
   <hr>
 
     <a href="{% url 'events:comment' event.pk %}"><button>Crie seu Comentário</button></a>
 </section>
-
+  {% endif %}
 {% endblock content %}
