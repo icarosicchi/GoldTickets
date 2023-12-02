@@ -26,7 +26,7 @@ class Event(models.Model):
         return reverse('detailView', args=[str(self.name)])
 
 class Comment(models.Model):
-    event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='comments', default=None)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='comments', default=None)
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     text = models.CharField(max_length=255)
     post_date = models.DateTimeField(default=timezone.now)

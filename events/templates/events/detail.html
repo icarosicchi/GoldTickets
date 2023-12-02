@@ -44,13 +44,11 @@
       <h3>Comentários</h3>
   </header>
   <ul>
-      {% if event.comment_set.all %}
-          {% for comment in event.comment_set.all %}
+      {% if comments %}
+          {% for comment in comments %}
               <figure>
-                  <blockquote>
-                      "{{ comment.text }}"
-                  </blockquote>
-                  <figcaption>—{{ comment.author }}</figcaption>
+                <strong>{{ comment.author }}</strong><br>
+                -  "{{ comment.text }}"</li>
               </figure>
           {% endfor %}
       {% else %}
