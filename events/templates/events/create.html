@@ -2,7 +2,7 @@
 
 {% block content %}
 <h2>Inserir Novo Evento</h2>
-<form method="post" action="{% url 'events:create' %}">
+<form method="post" enctype="multipart/form-data" action="{% url 'events:create' %}">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Criar</button>

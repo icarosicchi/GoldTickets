@@ -13,7 +13,7 @@
 <section class="lista-de-cards">
   {% for event in event_list %}
   <article class="card">
-    <a href="{% url 'events:detail' forloop.counter %}"
+    <a href="{% url 'events:detail' event.id %}"
       ><img src="{{ event.photo_url }}" alt="Foto do evento {{ event.name}}"
     /></a>
     <p>{{ event.name }} ({{ event.event_date }})</p>
