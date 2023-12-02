@@ -17,6 +17,11 @@ class EventDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['event_list'] = Event.objects.all()  
+        return context
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         event = self.get_object()
         comments = event.comments.all().order_by('-post_date')
         context['comments'] = comments
