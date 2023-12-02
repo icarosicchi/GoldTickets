@@ -5,6 +5,7 @@
 <h2>Resultado da Busca</h2>
 <p>Mostrando resultados para: "{{ query }}"</p>
 {% if events %}
+<h3>Eventos</h3>
     <section class="lista-de-cards">
         {% for event in events %}
             <article class="card">
@@ -19,6 +20,8 @@
     <p>Não foi encontrado nenhum evento para a busca.</p>
 {% endif %}
 {% if categories %}
+<hr>
+<h3>Categorias</h3>
     {% for category in categories %}
         <article class="card">
             <a href="{% url 'events:detail-category' category.id %}">
