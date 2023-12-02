@@ -8,7 +8,7 @@ class EventForm(forms.ModelForm):
     )
     categories = forms.ModelMultipleChoiceField(
         queryset=Category.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
+        widget=forms.SelectMultiple,
     )
     class Meta:
         model = Event

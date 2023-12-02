@@ -6,8 +6,8 @@ from events.models import Perfil
 
 class SignUpUserForm(UserCreationForm):
     email = forms.EmailField(label='Email')
-    first_name = forms.CharField(max_length=50, label='Primeiro nome')  # Altere 'primeiro_nome' para 'first_name'
-    last_name = forms.CharField(max_length=50, label='Último nome')  # Altere 'ultimo_nome' para 'last_name'
+    first_name = forms.CharField(max_length=50, label='Primeiro nome')  
+    last_name = forms.CharField(max_length=50, label='Último nome')  
     cpf = forms.CharField(max_length=14, label='CPF')
     cidade = forms.CharField(max_length=100, label='Cidade')
     username = forms.CharField(max_length=100, label='Nome de Login')

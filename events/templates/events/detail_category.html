@@ -1,5 +1,5 @@
 {% extends 'base.html' %} {% block title %} {{ event.title }} {% endblock title %} {% block content %}
-<h2>Eventos da Categoria {{ category.name }}</h2>
+<h2>Eventos da Categoria: {{ category.name }}</h2>
 
   <ul>
     <li><strong>Nome:</strong> {{ category.name }}</li>
@@ -11,7 +11,7 @@
 <section class="lista-de-cards">
     {% for event in category.events.all %}
     <article class="card">
-      <a href="{% url 'restaurants:detail' event.id %}"> <!-- modifique esta linha -->
+      <a href="{% url 'events:detail' event.id %}"> <!-- modifique esta linha -->
           <img src="{{ event.photo_url }}" alt="Foto do Evento {{ event.name }}" />
       </a>
       <p>{{ event.name }}</p>

@@ -20,7 +20,7 @@
             " width="15%" height="15%" > </a> <!-- adicione esta linha -->
         <nav id="navegacao-principal">
             <ul>
-                <li><a href="{% url 'events:index' %}">Eventos</a></li>
+                <li><a href="{% url 'events:categories' %}">Categorias</a></li>
                 <form role="search" method="POST" action="{% url 'events:search' %}">
                 {% csrf_token %}
                 <input type="search" size="30" placeholder="Buscar Evento" aria-label="Search" name="searched">

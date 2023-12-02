@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Comentar sobre o Evento {{ event.name }}</h2>
+
+<form action="{% url 'events:comment' event.id %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Postar Comentário</button>
+</form>
+
+<p><a href="{% url 'events:detail' event.id %}">Voltar para a página do evento</a></p>
+{% endblock content %}

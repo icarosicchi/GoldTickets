@@ -9,7 +9,7 @@ urlpatterns = [
     path('create/', views.EventCreateView.as_view(), name='create'), # adicione esta linha
     path('update/<int:pk>/', views.EventUpdateView.as_view(), name='update'),
     path('delete/<int:pk>/', views.EventDeleteView.as_view(), name='delete'),
-    path('<int:post_id>/comment/', views.create_comment, name='comment'),
+    path('<int:event_id>/comment/', views.create_comment, name='comment'),
     path('categories/', views.CategoryListView.as_view(), name='categories'),
     path('categories<int:pk>', views.CategoryDetailView.as_view(), name='detail-category'),
 ]

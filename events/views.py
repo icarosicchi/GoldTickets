@@ -81,7 +81,19 @@ def create_comment(request, event_id):
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
-            review_author = request.user # modificar esta linha
+            comment = form.save(commit=False)
+            comment_author = request.user 
+            comment_text = form.cleaned_data['text']
+            comment = Comment(author=comment_author,
+                            text=comment_text,
+                            event=event)
+            comment.save()
+            return HttpResponseRedirect(
+                reverse('events:detail', args=(event_id, )))
+    else:
+        form = CommentForm()
+    context = {'form': form, 'event': event}
+    return render(request, 'events/comment.html', context)   
 
 class CategoryListView(generic.ListView):
     model = Category
