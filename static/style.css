@@ -45,7 +45,7 @@ body {
 }
 
 #navegacao-principal {
-  width: 70%;
+  width: 50%; 
   list-style: none;
   margin: 0;
   padding: 0;
@@ -54,16 +54,15 @@ body {
 }
 
 #navegacao-principal ul {
-  width: 70%;
   list-style: none;
   padding: 0;
-  margin: 5vh;
+  margin: 0;
   display: flex;
   align-items: center;
 }
 
 #navegacao-principal li {
-  width: 70%;
+  margin-right: 20px;
   padding: 10px;
 }
 
