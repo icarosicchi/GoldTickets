@@ -5,6 +5,7 @@ Detalhes do Ingresso
 {% endblock title %}
 
 {% block content %}
+{% if ticket.sold %}
 <h2>Detalhes do Ingresso</h2>
 
 <section class="dados-de-evento">
@@ -12,9 +13,22 @@ Detalhes do Ingresso
     <ul>
       <li>Número do Ingresso: {{ ticket.number }}</li>
       <hr>
-      <li>Evento: {{ ticket.event.name }}</li>
+      <li>Evento: <a href="{% url 'events:detaul' ticket.event.id %}">{{ ticket.event.name }}</a></li>
       <hr>
       <li>Cliente: {{ ticket.client.username }}</li>
     </ul>
   </section>
+{% else %}
+<section class="dados-de-evento">
+    <img src="https://i.imgur.com/kiZE5gm.png" style="height: 20vh;width: auto;"/>
+    <ul>
+        <h2>Ingresso Reservado (Pré-Venda)</h2>
+      <li>Número do Ingresso: {{ ticket.number }}</li>
+      <hr>
+      <li>Evento: <a href="{% url 'events:detail' ticket.event.id %}">{{ ticket.event.name }}</a></li>
+      <hr>
+      <li>Cliente: {{ ticket.client.username }}</li>
+    </ul>
+  </section>
+{% endif %}
 {% endblock content %}

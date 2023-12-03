@@ -3,7 +3,7 @@
   {{ event.name }} ({{event.event_date }})
 {% endblock title %}
 {% block content %}
-<h2>Detalhes do Evento {{ event.name }} ({{ event.event_date }})</h2>
+<h2>Detalhes do Evento {{ event.name }}</h2>
 <section class="dados-de-evento">
   <img src="{{ event.photo_url }}" alt="Foto do evento {{ event.name}}" />
   <ul>
@@ -51,7 +51,7 @@
   {% else %}
       <p>Esgotado!</p>
   {% endif %}
-  <hr>
+  
 </section>
 {% endif %}
 

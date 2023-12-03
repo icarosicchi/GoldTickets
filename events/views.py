@@ -58,8 +58,12 @@ def user_events(request):
     
 def user_tickets(request):
     if request.user.is_authenticated:
-        user_tickets = Event.objects.filter(author_id=request.user.id, sold=True)
-        context = {'user_tickets': user_tickets}
+        user_tickets = Ticket.objects.filter(client=request.user.id, sold=True)
+        user_pre_tickets = Ticket.objects.filter(client=request.user.id, sold=False)
+        context = {
+            'user_tickets': user_tickets,
+            'user_pre_tickets': user_pre_tickets,
+        }
         return render(request, 'events/user_tickets.html', context)
     else:
         return render(request, 'events/login.html')
@@ -146,8 +150,8 @@ def get_tickets(request, event_id):
                 return render(request, 'events/ticket_detail.html', {'ticket': new_ticket})
         else:
             if request.method == 'POST':
-                ticket_number = event.total_tickets - event.tickets_left
                 event.tickets_left = event.tickets_left - 1
+                ticket_number = event.total_tickets - event.tickets_left
                 new_ticket = Ticket.objects.create(event=event, client=request.user, number=ticket_number, sold=True)
                 event.save()
                 return render(request, 'events/ticket_detail.html', {'ticket': new_ticket})
@@ -155,7 +159,6 @@ def get_tickets(request, event_id):
     
 def ticket_detail(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
-    if ticket.sold:
-        return render(request, 'events/ticket_detail.html', {'ticket': ticket})
+    return render(request, 'events/ticket_detail.html', {'ticket': ticket})
 
 # def buy_ticket():
