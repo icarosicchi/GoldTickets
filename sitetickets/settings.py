@@ -139,3 +139,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'events:index'
 LOGOUT_REDIRECT_URL = 'events:index'
+LOGIN_URL = 'login' # adicione esta linha

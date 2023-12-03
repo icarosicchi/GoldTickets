@@ -1,24 +1,27 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.urls import reverse,reverse_lazy
-from .models import Event, Comment, Category
+from .models import Event, Comment, Category, Ticket
 from django.views import generic
 from .forms import CommentForm, EventForm
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 class EventListView(generic.ListView):
     model = Event
     template_name = 'events/index.html'
 
-class EventDetailView(generic.DetailView):
-    model = Event
-    template_name = 'events/detail.html'
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['event_list'] = Event.objects.all()  
         return context
+
+class EventDetailView(generic.DetailView):
+    model = Event
+    template_name = 'events/detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -48,13 +51,14 @@ def user_events(request):
         context = {'user_events': user_events}
         return render(request, 'events/user_events.html', context)
     else:
-        return render(request, 'events/login_required.html')
-    
-class EventCreateView(generic.CreateView):
+        return render(request, 'events/login.html')
+
+class EventCreateView(LoginRequiredMixin,generic.CreateView):
     model = Event
     template_name = 'events/create.html'
     success_url = reverse_lazy('events:index')
     form_class = EventForm
+
     def createEvent(request):
         if request.method == 'POST':
             form = EventForm(request.POST)
@@ -127,7 +131,7 @@ def buy_tickets(request, event_id):
         ticket_number = event.total_tickets - event.tickets_left
         new_ticket = Ticket.objects.create(event=event, user=request.user, number=ticket_number)
         # Adicione lógica adicional, como atualizar o carrinho de compras, processar o pagamento, etc.
-        return render(request, 'events/buy_tickets.html')
+        return render(request, 'events/buy_ticket.html')
     else:
         # O usuário não está autenticado, redirecione para a página de login ou exiba uma mensagem de erro.
         return render(request, 'registration/login.html')
