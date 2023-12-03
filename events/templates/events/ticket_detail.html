@@ -13,7 +13,7 @@ Detalhes do Ingresso
     <ul>
       <li>Número do Ingresso: {{ ticket.number }}</li>
       <hr>
-      <li>Evento: <a href="{% url 'events:detaul' ticket.event.id %}">{{ ticket.event.name }}</a></li>
+      <li>Evento: <a href="{% url 'events:detail' ticket.event.id %}">{{ ticket.event.name }}</a></li>
       <hr>
       <li>Cliente: {{ ticket.client.username }}</li>
     </ul>
