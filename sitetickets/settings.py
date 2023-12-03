@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'events.apps.EventsConfig', # adicione esta linha
     'usuarios.apps.UsuariosConfig',
+    'api.apps.ApiConfig', # adicione esta linha
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
