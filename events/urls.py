@@ -13,4 +13,5 @@ urlpatterns = [
     path('categories/', views.CategoryListView.as_view(), name='categories'),
     path('categories<int:pk>', views.CategoryDetailView.as_view(), name='detail-category'),
     path('tickets/', views.buy_tickets, name='buy'),
+    path('user_events/', views.user_events, name='user_events'),
 ]

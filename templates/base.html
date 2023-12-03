@@ -1,4 +1,4 @@
-{% load static %} <!-- adicione esta linha -->
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,38 +7,48 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        {% block title %}{% endblock %} | GoldTickets
-    </title>
-    <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" /> <!-- adicione esta linha -->
-    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"> <!-- adicione esta linha -->
+    <title>{% block title %}{% endblock %} | GoldTickets</title>
+    <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 </head>
 
 <body>
     <header id="cabecalho-principal">
-        <a href="{% url 'events:index' %}"> <img src="https://i.imgur.com/Pl5bFdn.png
-            " width="15%" height="15%" > </a> <!-- adicione esta linha -->
+        <a href="{% url 'events:index' %}"> <img src="https://i.imgur.com/Pl5bFdn.png" width="15%" height="15%"> </a>
         <nav id="navegacao-principal">
             <ul>
                 <li><a href="{% url 'events:categories' %}">Categorias</a></li>
                 <form role="search" method="GET" action="{% url 'events:search' %}">
-                {% csrf_token %}
-                <input type="search" size="30" placeholder="Buscar" aria-label="Search" name="searched">
+                    {% csrf_token %}
+                    <input type="search" size="30" placeholder="Buscar" aria-label="Search" name="searched">
                 </form>
                 {% if user.is_authenticated %}
-                    <li style="width: 10vw;" style="display: inline-block;" > Logado com {{ user.username }} </li>
+                    <li style="width: 10vw; display: inline-block;"> Logado com {{ user.username }} </li>
                     <li><a href="{% url 'logout' %}">Logout</a></li>
+                    <li><a href="{% url 'events:user_events' %}">Meus eventos</a></li>
                 {% else %}
-                    <li></listyle><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
                 {% endif %}
             </ul>
-          </nav>
+        </nav>
     </header>
 
     <main id="conteiner-principal">
         {% block content %}
+        <div class="lista-de-cards">
+            <div class="card">
+                <img src="{% static 'imagem1.jpg' %}" alt="Descrição da imagem 1">
+                <div class="titulo-imagem">Título da Imagem 1</div>
+            </div>
+
+            <div class="card">
+                <img src="{% static 'imagem2.jpg' %}" alt="Descrição da imagem 2">
+                <div class="titulo-imagem">Título da Imagem 2</div>
+            </div>
+        </div>
         {% endblock content %}
     </main>
+
     <footer id="rodape-principal">
         <p>
             <small>Copyright 2023</small>
