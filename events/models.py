@@ -21,7 +21,7 @@ class Event(models.Model):
     total_tickets = models.IntegerField(default=0)
     tickets_left = models.IntegerField(default=0)
     photo_url = models.URLField(max_length=200, null=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
+    author = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category, related_name='events', blank=True)
     def __str__(self):
         return self.name

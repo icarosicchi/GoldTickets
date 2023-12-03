@@ -20,4 +20,6 @@
 {% else %}
 <p>Não foi encontrado nenhum evento.</p>
 {% endif %}
+<hr>
+<a href="{% url 'events:create' %}">Adicionar Novo Evento</a>
 {% endblock content %}

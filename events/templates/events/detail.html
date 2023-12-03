@@ -38,20 +38,32 @@
         </a>
     </li>
 {% endif %}
+{% if user.is_authenticated and event.author_id != user.id %}
 <section>
 <hr>
   <header>
       <h3>Comprar Ingressos!</h3>
   </header>
   {% if event.tickets_left > 0 %}
-    <a href="{% url 'buy' event.id %}"><button>Comprar Ingressos</button></a>
+  <p>Ingressos disponíveis: {{ event.tickets_left }}</p>
+    <a href="{% url 'events:buy-ticket' event.id %}"><button>Comprar Ingressos</button></a>
   {% else %}
       <p>Esgotado!</p>
   {% endif %}
   <hr>
 </section>
+{% endif %}
+
+{% if user.is_authenticated and event.author_id == user.id %}
+<section>
+  <hr>
+    <p>Ingressos totais: {{ event.total_tickets }}</p>
+    <p>Ingressos restantes: {{ event.tickets_left }}</p>
+  </section>
+{% endif %}
 
 <section>
+<hr>
   <header>
       <h3>Comentários</h3>
   </header>

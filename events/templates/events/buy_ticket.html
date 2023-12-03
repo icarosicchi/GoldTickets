@@ -1,13 +1,16 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Ingressos
+Comprar Ingresso
 {% endblock title %}
 
 {% block content %}
-<h2>Compra de Ingressos</h2>
+<h2>Comprar Ingresso</h2>
+<p>Evento: {{ event.name }}</p>
 
-<section>
-    
-</section>
+<form method="post" action="{% url 'events:buy-ticket' event.id %}">
+  {% csrf_token %}
+  <button type="submit">Comprar</button>
+</form>
+
 {% endblock content %}

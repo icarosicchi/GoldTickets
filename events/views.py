@@ -7,8 +7,11 @@ from .forms import CommentForm, EventForm
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
+class AuthorRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user == self.get_object().author
 
 class EventListView(generic.ListView):
     model = Event
@@ -53,38 +56,37 @@ def user_events(request):
     else:
         return render(request, 'events/login.html')
 
-class EventCreateView(LoginRequiredMixin,generic.CreateView):
+class EventCreateView(LoginRequiredMixin, generic.CreateView):
     model = Event
-    template_name = 'events/create.html'
-    success_url = reverse_lazy('events:index')
     form_class = EventForm
+    template_name = 'events/create.html'
+    success_url = '/'
 
-    def createEvent(request):
-        if request.method == 'POST':
-            form = EventForm(request.POST)
-            if form.is_valid():
-                event = form.save(commit=False)
-                event.author = request.user
-                event.tickets_left = event.total_tickets
-                event.time = timezone.now()
-                event.save()
-                form.save_m2m()
-                return redirect('detailView', pk=event.pk)
-        else:
-            form = EventForm()
-        return render(request, 'events/create.html', {'form': form})
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.tickets_left = form.instance.total_tickets
+        return super().form_valid(form)
 
-class EventUpdateView(generic.UpdateView):
+class EventUpdateView(generic.UpdateView, AuthorRequiredMixin):
     model = Event
     template_name = 'events/update.html'
     success_url = reverse_lazy('events:index')
     form_class = EventForm
 
-class EventDeleteView(generic.DeleteView):
+class EventDeleteView(LoginRequiredMixin, generic.DeleteView, AuthorRequiredMixin):
     model = Event
+    success_url = reverse_lazy('events:index')  
     template_name = 'events/delete.html'
-    success_url = reverse_lazy('events:index')
-    form_class = EventForm
+
+    def test_func(self):
+        Event = self.get_object()
+        return self.request.user == Event.author
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        return redirect(success_url)
 
 def search(request):
     query = request.GET.get('searched', '')
@@ -125,13 +127,16 @@ class CategoryDetailView(generic.DetailView):
     template_name = 'events/detail_category.html'
 
 def buy_tickets(request, event_id):
-    if request.user.is_authenticated and not request.user.is_staff:
-        event = Event.objects.get(pk=event_id)
+    event = Event.objects.get(pk=event_id)
+    
+    if request.method == 'POST':
         event.tickets_left -= 1
         ticket_number = event.total_tickets - event.tickets_left
-        new_ticket = Ticket.objects.create(event=event, user=request.user, number=ticket_number)
-        # Adicione lógica adicional, como atualizar o carrinho de compras, processar o pagamento, etc.
-        return render(request, 'events/buy_ticket.html')
-    else:
-        # O usuário não está autenticado, redirecione para a página de login ou exiba uma mensagem de erro.
-        return render(request, 'registration/login.html')
+        new_ticket = Ticket.objects.create(event=event, client=request.user, number=ticket_number)
+        return render(request, 'events/ticket_detail.html', {'ticket': new_ticket})
+
+    return render(request, 'events/buy_ticket.html', {'event': event})
+    
+def ticket_detail(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+    return render(request, 'events/ticket_detail.html', {'ticket': ticket})

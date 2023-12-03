@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Detalhes do Ingresso
+{% endblock title %}
+
+{% block content %}
+<h2>Detalhes do Ingresso</h2>
+
+<section class="dados-de-evento">
+    <img src="https://i.imgur.com/kiZE5gm.png" style="height: 20vh;width: auto;"/>
+    <ul>
+      <li>Número do Ingresso: {{ ticket.number }}</li>
+      <hr>
+      <li>Evento: {{ ticket.event.name }}</li>
+      <hr>
+      <li>Cliente: {{ ticket.client.username }}</li>
+    </ul>
+  </section>
+{% endblock content %}
