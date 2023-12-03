@@ -8,7 +8,12 @@ class EventForm(forms.ModelForm):
     )
     categories = forms.ModelMultipleChoiceField(
         queryset=Category.objects.all(),
-        widget=forms.SelectMultiple,
+        widget=forms.CheckboxSelectMultiple,
+    )
+    presale = forms.BooleanField()
+    sale_date = forms.DateField(
+        input_formats=['%d/%m/%Y'],
+        widget=forms.DateInput(format='%d/%m/%Y')
     )
     class Meta:
         model = Event
@@ -18,6 +23,9 @@ class EventForm(forms.ModelForm):
             'location',
             'event_date',
             'price',
+            'presale',
+            'presale_tickets',
+            'sale_date',
             'total_tickets',
             'photo_url',
             'categories'
@@ -28,6 +36,9 @@ class EventForm(forms.ModelForm):
             'location': 'Local',
             'event_date': 'Data do Evento',
             'price': 'Valor do Ingresso',
+            'presale': 'Habilitar pré-venda?',
+            'presale_tickets': 'Quantidade de ingressos na pré-venda',
+            'sale_date': 'Data de início das vendas',
             'total_tickets' : 'Quantidade de ingressos',
             'photo_url': 'URL da foto',
             'categories': 'Categorias do Evento'

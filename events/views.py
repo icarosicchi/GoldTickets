@@ -58,7 +58,7 @@ def user_events(request):
     
 def user_tickets(request):
     if request.user.is_authenticated:
-        user_tickets = Event.objects.filter(author_id=request.user.id)
+        user_tickets = Event.objects.filter(author_id=request.user.id, sold=True)
         context = {'user_tickets': user_tickets}
         return render(request, 'events/user_tickets.html', context)
     else:
@@ -134,17 +134,28 @@ class CategoryDetailView(generic.DetailView):
     model = Category
     template_name = 'events/detail_category.html'
 
-def buy_tickets(request, event_id):
+def get_tickets(request, event_id):
     event = Event.objects.get(pk=event_id)
-    
-    if request.method == 'POST':
-        event.tickets_left -= 1
-        ticket_number = event.total_tickets - event.tickets_left
-        new_ticket = Ticket.objects.create(event=event, client=request.user, number=ticket_number)
-        return render(request, 'events/ticket_detail.html', {'ticket': new_ticket})
-
-    return render(request, 'events/buy_ticket.html', {'event': event})
+    if event.tickets_left > 0:
+        if event.presale and event.sale_date >= timezone.now().date():
+            if request.method == 'POST':
+                ticket_number = event.waiting_tickets + 1
+                event.waiting_tickets = event.waiting_tickets + 1
+                new_ticket = Ticket.objects.create(event=event, client=request.user, number=ticket_number, sold=False)
+                event.save()
+                return render(request, 'events/ticket_detail.html', {'ticket': new_ticket})
+        else:
+            if request.method == 'POST':
+                ticket_number = event.total_tickets - event.tickets_left
+                event.tickets_left = event.tickets_left - 1
+                new_ticket = Ticket.objects.create(event=event, client=request.user, number=ticket_number, sold=True)
+                event.save()
+                return render(request, 'events/ticket_detail.html', {'ticket': new_ticket})
+    return render(request, 'events/get_ticket.html', {'event': event})
     
 def ticket_detail(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
-    return render(request, 'events/ticket_detail.html', {'ticket': ticket})
+    if ticket.sold:
+        return render(request, 'events/ticket_detail.html', {'ticket': ticket})
+
+# def buy_ticket():

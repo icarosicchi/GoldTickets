@@ -8,7 +8,7 @@ Comprar Ingresso
 <h2>Comprar Ingresso</h2>
 <p>Evento: {{ event.name }}</p>
 
-<form method="post" action="{% url 'events:buy-ticket' event.id %}">
+<form method="post" action="{% url 'events:get-ticket' event.id %}">
   {% csrf_token %}
   <button type="submit">Comprar</button>
 </form>

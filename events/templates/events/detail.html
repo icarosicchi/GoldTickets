@@ -46,7 +46,8 @@
   </header>
   {% if event.tickets_left > 0 %}
   <p>Ingressos disponíveis: {{ event.tickets_left }}</p>
-    <a href="{% url 'events:buy-ticket' event.id %}"><button>Comprar Ingressos</button></a>
+  <p>Fila de espera: {{ event.waiting_tickets }}</p>
+    <a href="{% url 'events:get-ticket' event.id %}"><button>Comprar Ingressos</button></a>
   {% else %}
       <p>Esgotado!</p>
   {% endif %}

@@ -18,8 +18,12 @@ class Event(models.Model):
     event_date = models.DateField(null=True, default="")
     creation_date = models.DateTimeField(default=timezone.now)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    presale = models.BooleanField(default=False)
+    presale_tickets = models.IntegerField(default=0)
+    sale_date = models.DateField(default=timezone.now)
     total_tickets = models.IntegerField(default=0)
     tickets_left = models.IntegerField(default=0)
+    waiting_tickets = models.IntegerField(default=0)
     photo_url = models.URLField(max_length=200, null=True)
     author = models.ForeignKey(User, default=None, on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category, related_name='events', blank=True)
@@ -41,6 +45,7 @@ class Ticket(models.Model):
     event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='tickets')
     client = models.ForeignKey(User, on_delete=models.CASCADE)
     number = models.IntegerField(default=0)
+    sold = models.BooleanField(default=False)
 
 class Perfil(models.Model):
     user = models.OneToOneField(User,null=True,on_delete=models.CASCADE)
