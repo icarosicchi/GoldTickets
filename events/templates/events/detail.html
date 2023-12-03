@@ -23,12 +23,24 @@
       <li> <a href="{% url 'events:detail-category' category.id %}">-> {{ category.name }}</a></li>
       {% endfor %}
     {% endif %}
-    {% if user.is_authenticated and user.id == event.author_id %}
-    <hr>
-      <li><a href="{% url 'events:update' event.id %}">Editar</a></li>
-      <li><a href="{% url 'events:delete' event.id %}">Apagar</a></li>
+    {% if user.is_authenticated and user.id == event.author.id %}
+      <hr>
+        <li><a href="{% url 'events:update' event.id %}">Editar</a></li>
+        <li><a href="{% url 'events:delete' event.id %}">Apagar</a></li>
     {% endif %}
   </ul>
+</section>
+
+<section>
+  <header>
+      <h3>Comprar Ingressos!</h3>
+  </header>
+  {% if event.tickets_left > 0 %}
+    <a href="{% url 'events:buy' event.id %}"><button>Comprar Ingressos</button></a>
+  {% else %}
+      <p>Esgotado!</p>
+  {% endif %}
+  <hr>
 </section>
 
 <section>
