@@ -60,7 +60,8 @@ class EventCreateView(generic.CreateView):
             form = EventForm(request.POST)
             if form.is_valid():
                 event = form.save(commit=False)
-                event.author_id = get_author_id(request.user)
+                event.author = request.user
+                event.tickets_left = event.total_tickets
                 event.time = timezone.now()
                 event.save()
                 form.save_m2m()
@@ -80,14 +81,6 @@ class EventDeleteView(generic.DeleteView):
     template_name = 'events/delete.html'
     success_url = reverse_lazy('events:index')
     form_class = EventForm
-
-def search_events(request):
-    context = {}
-    if request.GET.get('query', False):
-        search_term = request.GET['query'].lower()
-        event_list = Event.objects.filter(name__icontains=search_term)
-        context = {"event_list": event_list}
-    return render(request, 'events/search.html', context)
 
 def search(request):
     query = request.GET.get('searched', '')
@@ -126,3 +119,15 @@ class CategoryListView(generic.ListView):
 class CategoryDetailView(generic.DetailView):
     model = Category
     template_name = 'events/detail_category.html'
+
+def buy_tickets(request, event_id):
+    if request.user.is_authenticated and not request.user.is_staff:
+        event = Event.objects.get(pk=event_id)
+        event.tickets_left -= 1
+        ticket_number = event.total_tickets - event.tickets_left
+        new_ticket = Ticket.objects.create(event=event, user=request.user, number=ticket_number)
+        # Adicione lógica adicional, como atualizar o carrinho de compras, processar o pagamento, etc.
+        return render(request, 'events/buy_tickets.html')
+    else:
+        # O usuário não está autenticado, redirecione para a página de login ou exiba uma mensagem de erro.
+        return render(request, 'registration/login.html')

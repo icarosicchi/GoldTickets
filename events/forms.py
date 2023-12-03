@@ -18,6 +18,7 @@ class EventForm(forms.ModelForm):
             'location',
             'event_date',
             'price',
+            'total_tickets',
             'photo_url',
             'categories'
         ]
@@ -27,6 +28,7 @@ class EventForm(forms.ModelForm):
             'location': 'Local',
             'event_date': 'Data do Evento',
             'price': 'Valor do Ingresso',
+            'total_tickets' : 'Quantidade de ingressos',
             'photo_url': 'URL da foto',
             'categories': 'Categorias do Evento'
         }

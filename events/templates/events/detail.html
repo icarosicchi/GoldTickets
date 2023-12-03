@@ -41,6 +41,18 @@
 <section>
 <hr>
   <header>
+      <h3>Comprar Ingressos!</h3>
+  </header>
+  {% if event.tickets_left > 0 %}
+    <a href="{% url 'events:buy' event.id %}"><button>Comprar Ingressos</button></a>
+  {% else %}
+      <p>Esgotado!</p>
+  {% endif %}
+  <hr>
+</section>
+
+<section>
+  <header>
       <h3>Comentários</h3>
   </header>
   <ul>
