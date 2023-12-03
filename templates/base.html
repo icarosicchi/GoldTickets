@@ -26,6 +26,7 @@
                     <li style="width: 10vw; display: inline-block;"> Logado com {{ user.username }} </li>
                     <li><a href="{% url 'logout' %}">Logout</a></li>
                     <li><a href="{% url 'events:user_events' %}">Meus eventos</a></li>
+                    <li><a href="{% url 'events:user_tickets' %}">Meus tickets</a></li>
                 {% else %}
                     <li><a href="{% url 'login' %}">Login</a></li>
                 {% endif %}

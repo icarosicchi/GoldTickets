@@ -1,0 +1,23 @@
+<!-- user_events.html -->
+{% extends 'base.html' %} 
+{% block title %}
+  Meus Tickets
+{% endblock title %}
+{% block content %}
+  <h2>Meus Tickets</h2>
+
+{% if user_tickets %}
+<section class="lista-de-cards">
+  {% for ticket in user_tickets %}
+  <article class="card">
+    <a href="{% url 'events:ticket_detail' ticket.id %}"
+      ><img src="https://i.imgur.com/kiZE5gm.png" style="height: 15vh;width: auto;"/>
+    /></a>
+    <p>{{ ticket.event.name }} ({{ ticket.event.event_date }})</p>
+  </article>
+  {% endfor %}
+</section>
+{% else %}
+<p>Não foi encontrado nenhum ticket.</p>
+{% endif %}
+{% endblock content %}

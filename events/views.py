@@ -55,6 +55,14 @@ def user_events(request):
         return render(request, 'events/user_events.html', context)
     else:
         return render(request, 'events/login.html')
+    
+def user_tickets(request):
+    if request.user.is_authenticated:
+        user_tickets = Event.objects.filter(author_id=request.user.id)
+        context = {'user_tickets': user_tickets}
+        return render(request, 'events/user_tickets.html', context)
+    else:
+        return render(request, 'events/login.html')
 
 class EventCreateView(LoginRequiredMixin, generic.CreateView):
     model = Event
