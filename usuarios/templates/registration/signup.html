@@ -7,10 +7,11 @@ Criar Usuário
 {% block content %}
 <h2>Criar Usuário</h2>
 
-<form method="post">
+<form method="post" action="{% url 'signup' %}">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Criar</button>
+    <input type="checkbox" name="is_staff" id="is_staff"> Quero ser um organizador de eventos!
+    <button type="submit">Próxima Etapa</button>
 </form>
 
-{% endblock content %} 
+{% endblock content %}

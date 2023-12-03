@@ -13,11 +13,20 @@ class SignUpUserForm(UserCreationForm):
     username = forms.CharField(max_length=100, label='Nome de Login')
     password1 = forms.CharField(max_length=100, label='Senha', widget=forms.PasswordInput)
     password2 = forms.CharField(max_length=100, label='Confirme sua senha', widget=forms.PasswordInput)
-
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'cpf', 'cidade', 'password1', 'password2']
 
+from django import forms
+
+class CadastroSegundaEtapaForm(forms.Form):
+    informacao_adicional = forms.CharField(max_length=100, required=True)
+    uploaded_file = forms.FileField(required=False)
+    tornar_staff = forms.BooleanField(required=False)
+
+
+class SignUpAdmUserForm(UserCreationForm):
+    payment_file = forms.FileField(required=False, label='Pagamento PIX')
 
 class CustomAuthenticationForm(AuthenticationForm):
     username = forms.CharField(label='Nome de Login')
