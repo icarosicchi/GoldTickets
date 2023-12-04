@@ -399,11 +399,6 @@ input[type="search"] {
     align-items: center;
   }
 
-  #menu-responsivo img {
-    width: 50%;
-    margin-left: 10px;
-  }
-
   #cabecalho-principal #navegacao-principal {
     display: none;
   }
