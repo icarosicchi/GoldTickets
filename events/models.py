@@ -47,6 +47,11 @@ class Ticket(models.Model):
     number = models.IntegerField(default=0)
     sold = models.BooleanField(default=False)
 
+class Payment(models.Model):
+    tickets = models.ForeignKey('Ticket', on_delete=models.CASCADE, related_name='payment')
+    tickets_amount = models.PositiveIntegerField(default=1)
+    payment_voucher = models.FileField(upload_to='comprovantes_pagamento/')
+
 class Perfil(models.Model):
     user = models.OneToOneField(User,null=True,on_delete=models.CASCADE)
     bio = models.TextField()

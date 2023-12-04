@@ -10,6 +10,7 @@ Comprar Ingresso
 
 <form method="post" action="{% url 'events:get-ticket' event.id %}">
   {% csrf_token %}
+  {{ form.as_p }}
   <button type="submit">Comprar</button>
 </form>
 
