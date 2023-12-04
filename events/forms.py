@@ -1,5 +1,5 @@
 from django import forms
-from .models import Event, Comment, Category
+from .models import Event, Comment, Category, Payment
 
 class EventForm(forms.ModelForm):
     event_date = forms.DateField(
@@ -9,8 +9,9 @@ class EventForm(forms.ModelForm):
     categories = forms.ModelMultipleChoiceField(
         queryset=Category.objects.all(),
         widget=forms.CheckboxSelectMultiple,
+        required=False
     )
-    presale = forms.BooleanField()
+    presale = forms.BooleanField(required=False)
     sale_date = forms.DateField(
         input_formats=['%d/%m/%Y'],
         widget=forms.DateInput(format='%d/%m/%Y')
@@ -52,4 +53,17 @@ class CommentForm(forms.ModelForm):
         ]
         labels = {
             'text': 'Comentário',
+        }
+
+class GetTicketsForm(forms.Form):
+    tickets_amount = forms.IntegerField(label='Quantidade de ingressos')
+
+class PaymentForm(forms.ModelForm):
+    class Meta:
+        model = Payment
+        fields = [
+            'payment_voucher',
+        ]
+        labels = {
+            'text': 'Comprovante de pagamento PIX',
         }

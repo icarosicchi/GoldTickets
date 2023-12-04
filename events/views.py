@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.urls import reverse,reverse_lazy
-from .models import Event, Comment, Category, Ticket
+from .models import Event, Comment, Category, Ticket, Payment
 from django.views import generic
-from .forms import CommentForm, EventForm
+from .forms import CommentForm, EventForm, GetTicketsForm, PaymentForm
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from urllib.parse import urlencode
 
 class AuthorRequiredMixin(UserPassesTestMixin):
     def test_func(self):
@@ -139,26 +140,57 @@ class CategoryDetailView(generic.DetailView):
     template_name = 'events/detail_category.html'
 
 def get_tickets(request, event_id):
-    event = Event.objects.get(pk=event_id)
+    event = get_object_or_404(Event, pk=event_id)
+    form = GetTicketsForm(request.POST)
+    tickets_id = []
     if event.tickets_left > 0:
         if event.presale and event.sale_date >= timezone.now().date():
             if request.method == 'POST':
-                ticket_number = event.waiting_tickets + 1
-                event.waiting_tickets = event.waiting_tickets + 1
-                new_ticket = Ticket.objects.create(event=event, client=request.user, number=ticket_number, sold=False)
-                event.save()
-                return render(request, 'events/ticket_detail.html', {'ticket': new_ticket})
+                form = GetTicketsForm(request.POST)
+                if form.is_valid():
+                    tickets_amount = form.cleaned_data['tickets_amount']
+                    for i in range(tickets_amount):
+                        ticket_number = event.waiting_tickets + 1
+                        event.waiting_tickets = event.waiting_tickets + 1
+                        new_ticket = Ticket.objects.create(event=event, client=request.user, number=ticket_number, sold=False)
+                        event.save()
+                    return redirect('events:user_tickets')
+            else:
+                form = GetTicketsForm()
         else:
             if request.method == 'POST':
-                event.tickets_left = event.tickets_left - 1
-                ticket_number = event.total_tickets - event.tickets_left
-                new_ticket = Ticket.objects.create(event=event, client=request.user, number=ticket_number, sold=True)
-                event.save()
-                return render(request, 'events/ticket_detail.html', {'ticket': new_ticket})
-    return render(request, 'events/get_ticket.html', {'event': event})
-    
+                form = GetTicketsForm(request.POST)
+                if form.is_valid():
+                    tickets_amount = form.cleaned_data['tickets_amount']
+                    for i in range(tickets_amount):
+                        event.tickets_left = event.tickets_left - 1
+                        event.save()
+                        ticket_number = event.total_tickets - event.tickets_left
+                        new_ticket = Ticket.objects.create(event=event, client=request.user, number=ticket_number, sold=True)
+                        tickets_id.append(new_ticket.id)
+                    tickets_id = {
+                        'tickets': tickets_id,
+                    }
+                    url = reverse('events:payment', kwargs={'event_id': event_id}) + f'?{urlencode({"tickets_id": tickets_id})}'
+                    return redirect(url)
+                else:
+                    form = GetTicketsForm()
+    return render(request, 'events/get_ticket.html', {'event': event, 'form': form})
+
 def ticket_detail(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
     return render(request, 'events/ticket_detail.html', {'ticket': ticket})
 
-# def buy_ticket():
+def payment(request, event_id):
+    tickets_id = request.GET.get('tickets_id')
+    if request.method == 'POST':
+        form = PaymentForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_file = request.FILES.get('payment_voucher')
+            payment = form.save(commit=False)
+            payment = Payment(tickets=tickets_id,ticket_amount=len(tickets_id),payment_voucher=uploaded_file)
+            payment.save()
+            # return redirect('events:paied')
+    else:
+        form = PaymentForm()
+    return render(request, 'events/payment.html', {'event_id': event_id,'tickets_amount': len(tickets_id), 'form': form})
