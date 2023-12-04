@@ -266,6 +266,24 @@ input[type="search"] {
   font-size: 120%;
 }
 
+#menu-responsivo form {
+  margin-top: 10px;
+  width: 100%;
+}
+
+#menu-responsivo input {
+  width: 80%;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-right: 10px;
+}
+
+#menu-responsivo button {
+  width: 18%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
 #menu-btn {
   display: none;
   cursor: pointer;
@@ -318,5 +336,9 @@ input[type="search"] {
   #menu-responsivo img {
     width: 50%;
     margin-left: 10px;
+  }
+
+  #cabecalho-principal #navegacao-principal {
+    display: none;
   }
 }
