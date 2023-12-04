@@ -250,12 +250,6 @@ input[type="search"] {
   align-items: center;
 }
 
-#menu-responsivo img {
-  width: 50%;
-  height: auto;
-  margin-left: 10%;
-}
-
 #menu-responsivo a {
   text-decoration: none;
   color: rgb(65, 56, 16);
