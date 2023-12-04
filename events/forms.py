@@ -14,8 +14,11 @@ class EventForm(forms.ModelForm):
     presale = forms.BooleanField(required=False)
     sale_date = forms.DateField(
         input_formats=['%d/%m/%Y'],
-        widget=forms.DateInput(format='%d/%m/%Y')
+        widget=forms.DateInput(format='%d/%m/%Y'),
+        required=False
     )
+    presale_tickets = forms.IntegerField(required=False)
+
     class Meta:
         model = Event
         fields = [
