@@ -18,12 +18,13 @@
         <nav id="navegacao-principal">
             <ul>
                 <li><a href="{% url 'events:categories' %}">Categorias</a></li>
-                <form role="search" method="GET" action="{% url 'events:search' %}">
-                    {% csrf_token %}
-                    <input type="search" size="30" placeholder="Buscar" aria-label="Search" name="searched">
-                </form>
+                <li><form role="search" method="GET" action="{% url 'events:search' %}">
+                        {% csrf_token %}
+                        <input type="search" size="30" placeholder="Buscar" aria-label="Search" name="searched">
+                    </form>
+                </li>
                 {% if user.is_authenticated %}
-                    <li style="width: 10vw; display: inline-block;"> Logado com {{ user.username }} </li>
+                    <li style="width: 100%;"> Logado com {{ user.username }} </li>
                     <li><a href="{% url 'logout' %}">Logout</a></li>
                     {% if user.is_staff %}
                         <li><a href="{% url 'events:user_events' %}">Meus eventos</a></li>
