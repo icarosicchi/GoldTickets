@@ -14,7 +14,11 @@
 
 <body>
     <header id="cabecalho-principal">
-        <a href="{% url 'events:index' %}"> <img src="https://i.imgur.com/Pl5bFdn.png" width="15%" height="15%"> </a>
+        <div class="logo-container">
+            <a href="{% url 'events:index' %}">
+                <img src="https://i.imgur.com/Pl5bFdn.png" alt="Logo" width="50%">
+            </a>
+        </div>
         <nav id="navegacao-principal">
             <ul>
                 <li><a href="{% url 'events:categories' %}">Categorias</a></li>
