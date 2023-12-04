@@ -28,6 +28,8 @@ Detalhes do Ingresso
       <li>Evento: <a href="{% url 'events:detail' ticket.event.id %}">{{ ticket.event.name }}</a></li>
       <hr>
       <li>Cliente: {{ ticket.client.username }}</li>
+      <hr>
+      <li><a href="{% url 'events:user_tickets' %}">Voltar</a></li>
     </ul>
   </section>
 {% endif %}
