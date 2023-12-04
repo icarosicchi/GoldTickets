@@ -61,7 +61,12 @@
                     </form>
                 </li>
                 {% if user.is_authenticated %}
-                    <!-- ... (restante dos links) ... -->
+                    <li style="width: 100%;"> Logado com {{ user.username }} </li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% if user.is_staff %}
+                        <li><a href="{% url 'events:user_events' %}">Meus eventos</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'events:user_tickets' %}">Meus tickets</a></li>
                 {% else %}
                     <li><a href="{% url 'login' %}">Login</a></li>
                 {% endif %}
