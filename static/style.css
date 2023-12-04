@@ -266,6 +266,11 @@ input[type="search"] {
   font-size: 120%;
 }
 
+#menu-btn {
+  display: none;
+  cursor: pointer;
+}
+
 @media only screen and (max-width: 768px) {
   #cabecalho-principal img {
     width: 50%;
@@ -306,9 +311,13 @@ input[type="search"] {
     width: 100%;
   }
 
+  #menu-btn {
+    display: block;
+  }
+
   #menu-responsivo {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
   }
 
