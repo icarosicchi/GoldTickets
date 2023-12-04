@@ -20,7 +20,7 @@ Pagamento
     </ul>
   </section>
 
-<form action="{% url 'events:payment' event.id %}" method="post">
+<form method="post" enctype="multipart/form-data" action="{% url 'events:payment' event.id %}">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Finalizar Pagamento!</button>

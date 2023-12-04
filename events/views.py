@@ -201,7 +201,8 @@ def ticket_detail(request, ticket_id):
 def payment(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     tickets_id = request.GET.get('tickets_id')
-    form = PaymentForm(request.POST or None, request.FILES or None)
+    print("Tickets ID:", tickets_id)
+    form = PaymentForm(request.POST, request.FILES)
     if request.method == 'POST':
         form = PaymentForm(request.POST, request.FILES)
         if form.is_valid():
