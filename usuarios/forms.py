@@ -17,14 +17,6 @@ class SignUpUserForm(UserCreationForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'cpf', 'cidade', 'password1', 'password2']
 
-from django import forms
-
-class CadastroSegundaEtapaForm(forms.Form):
-    informacao_adicional = forms.CharField(max_length=100, required=True)
-    uploaded_file = forms.FileField(required=False)
-    tornar_staff = forms.BooleanField(required=False)
-
-
 class SignUpAdmUserForm(UserCreationForm):
     payment_file = forms.FileField(required=False, label='Pagamento PIX')
 
