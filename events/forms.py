@@ -65,5 +65,5 @@ class PaymentForm(forms.ModelForm):
             'payment_voucher',
         ]
         labels = {
-            'text': 'Comprovante de pagamento PIX',
+            'payment_voucher': 'Comprovante de pagamento PIX',
         }

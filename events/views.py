@@ -182,6 +182,7 @@ def ticket_detail(request, ticket_id):
     return render(request, 'events/ticket_detail.html', {'ticket': ticket})
 
 def payment(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
     tickets_id = request.GET.get('tickets_id')
     if request.method == 'POST':
         form = PaymentForm(request.POST, request.FILES)
@@ -190,7 +191,25 @@ def payment(request, event_id):
             payment = form.save(commit=False)
             payment = Payment(tickets=tickets_id,ticket_amount=len(tickets_id),payment_voucher=uploaded_file)
             payment.save()
-            # return redirect('events:paied')
+            return redirect('events:paied', event_id)
     else:
         form = PaymentForm()
-    return render(request, 'events/payment.html', {'event_id': event_id,'tickets_amount': len(tickets_id), 'form': form})
+    if tickets_id:
+        context = {
+            'event': event,
+            'tickets_amount': len(tickets_id), 
+            'total':len(tickets_id)*event.price, 
+            'form': form}
+    else:
+        context = {
+            'event': event,
+            'tickets_amount': 0, 
+            'total':0.00, 
+            'form': form}
+    return render(request, 'events/payment.html', context)
+
+def paid(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    return render(request, 'events/detail.html', {'event': event})
+
+    

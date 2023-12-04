@@ -7,4 +7,23 @@ Pagamento
 {% block content %}
 <h2>Pagamento</h2>
 
+<section class="dados-da-compra">
+    <ul>
+      <li>Quantidade de ingressos: {{ tickets_amount }}</li>
+      <hr>
+      <li>Data do Evento: {{ event.event_date }}</li>
+      <hr>
+      <li>Valor individual dos ingressos: R${{ event.price }}</li>
+      <hr>
+      <li>Valor total da compra: R${{ total }}</li>
+      <hr>
+    </ul>
+  </section>
+
+<form action="{% url 'events:payment' event.id %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Finalizar Pagamento!</button>
+</form>
+
 {% endblock content %}
