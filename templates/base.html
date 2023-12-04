@@ -35,6 +35,7 @@
                 {% endif %}
             </ul>
         </nav>
+        <div id="menu-btn">&#9776; Menu</div>
     </header>
 
     <div id="menu-responsivo">
@@ -74,6 +75,17 @@
             <small>Copyright 2023</small>
         </p>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuBtn = document.getElementById('menu-btn');
+            const navegacaoPrincipal = document.getElementById('navegacao-principal');
+
+            menuBtn.addEventListener('click', function () {
+                navegacaoPrincipal.classList.toggle('active');
+            });
+        });
+    </script>
 </body>
 
 </html>
