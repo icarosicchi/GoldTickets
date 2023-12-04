@@ -272,15 +272,26 @@ input[type="search"] {
 }
 
 @media only screen and (max-width: 768px) {
-  #cabecalho-principal img {
-    width: 50%;
-    margin-left: 0;
+  #cabecalho-principal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   #navegacao-principal {
-    width: 100%;
+    display: none;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    background-color: rgb(219, 163, 32);
+    padding: 10px;
+  }
+
+  #navegacao-principal.active {
+    display: flex;
   }
 
   #navegacao-principal li {
@@ -292,23 +303,6 @@ input[type="search"] {
 
   #navegacao-principal a {
     font-size: 90%;
-  }
-
-  .search-form {
-    max-width: 100%;
-  }
-
-  .barra {
-    margin-right: 0;
-  }
-
-  .search-button img {
-    left: calc(100% - 25px);
-  }
-
-  .card,
-  .small-card {
-    width: 100%;
   }
 
   #menu-btn {
