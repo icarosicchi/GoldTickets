@@ -9,11 +9,15 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from urllib.parse import urlencode
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
+@method_decorator(csrf_exempt, name='dispatch')
 class AuthorRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_authenticated and self.request.user == self.get_object().author
 
+@method_decorator(csrf_exempt, name='dispatch')
 class EventListView(generic.ListView):
     model = Event
     template_name = 'events/index.html'
@@ -23,6 +27,7 @@ class EventListView(generic.ListView):
         context['event_list'] = Event.objects.all()  
         return context
 
+@method_decorator(csrf_exempt, name='dispatch')
 class EventDetailView(generic.DetailView):
     model = Event
     template_name = 'events/detail.html'
@@ -49,6 +54,7 @@ class EventDetailView(generic.DetailView):
             comments = event.comments.all().order_by('-pub_date')
             return render(request, 'events/detail.html', {'event': event, 'comments': comments, 'form': form})
 
+@csrf_exempt
 def user_events(request):
     if request.user.is_authenticated:
         user_events = Event.objects.filter(author_id=request.user.id)
@@ -56,7 +62,8 @@ def user_events(request):
         return render(request, 'events/user_events.html', context)
     else:
         return render(request, 'events/login.html')
-    
+  
+@csrf_exempt  
 def user_tickets(request):
     if request.user.is_authenticated:
         user_tickets = Ticket.objects.filter(client=request.user.id, sold=True)
@@ -69,6 +76,7 @@ def user_tickets(request):
     else:
         return render(request, 'events/login.html')
 
+@method_decorator(csrf_exempt, name='dispatch')
 class EventCreateView(LoginRequiredMixin, generic.CreateView):
     model = Event
     form_class = EventForm
@@ -80,12 +88,14 @@ class EventCreateView(LoginRequiredMixin, generic.CreateView):
         form.instance.tickets_left = form.instance.total_tickets
         return super().form_valid(form)
 
+@method_decorator(csrf_exempt, name='dispatch')
 class EventUpdateView(generic.UpdateView, AuthorRequiredMixin):
     model = Event
     template_name = 'events/update.html'
     success_url = reverse_lazy('events:index')
     form_class = EventForm
 
+@method_decorator(csrf_exempt, name='dispatch')
 class EventDeleteView(LoginRequiredMixin, generic.DeleteView, AuthorRequiredMixin):
     model = Event
     success_url = reverse_lazy('events:index')  
@@ -101,6 +111,7 @@ class EventDeleteView(LoginRequiredMixin, generic.DeleteView, AuthorRequiredMixi
         self.object.delete()
         return redirect(success_url)
 
+@csrf_exempt
 def search(request):
     query = request.GET.get('searched', '')
     events = Event.objects.filter(name__icontains=query)
@@ -112,6 +123,7 @@ def search(request):
     }
     return render(request, 'events/search.html', context)
 
+@csrf_exempt
 def create_comment(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     if request.method == 'POST':
@@ -131,14 +143,17 @@ def create_comment(request, event_id):
     context = {'form': form, 'event': event}
     return render(request, 'events/comment.html', context)   
 
+@method_decorator(csrf_exempt, name='dispatch')
 class CategoryListView(generic.ListView):
     model = Category
     template_name = 'events/categories.html' 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class CategoryDetailView(generic.DetailView):
     model = Category
     template_name = 'events/detail_category.html'
 
+@csrf_exempt
 def get_tickets(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     form = GetTicketsForm(request.POST)
@@ -177,10 +192,12 @@ def get_tickets(request, event_id):
                     form = GetTicketsForm()
     return render(request, 'events/get_ticket.html', {'event': event, 'form': form})
 
+@csrf_exempt
 def ticket_detail(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
     return render(request, 'events/ticket_detail.html', {'ticket': ticket})
 
+@csrf_exempt
 def payment(request, event_id):
     tickets_id = request.GET.get('tickets_id')
     if request.method == 'POST':

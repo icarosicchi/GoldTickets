@@ -5,7 +5,10 @@ from .forms import SignUpUserForm, CustomAuthenticationForm, PerfilForm, SignUpA
 from events.models import Perfil
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
+@method_decorator(csrf_exempt, name='dispatch')
 class UserSignUpView(generic.CreateView):
     form_class = SignUpUserForm
     template_name = "registration/signup.html"
@@ -26,6 +29,7 @@ class UserSignUpView(generic.CreateView):
                 return redirect('login')
         return render(request, self.template_name, {'form': form})
 
+@method_decorator(csrf_exempt, name='dispatch')
 class StaffSignUpView(generic.DetailView):
     form_class = SignUpAdmUserForm
     template_name = "registration/signup_adm.html"
@@ -45,10 +49,12 @@ class StaffSignUpView(generic.DetailView):
             return redirect('login')
         return render(request, self.template_name, {'form': form})
 
+@method_decorator(csrf_exempt, name='dispatch')
 class UserLoginView(LoginView):
     form_class = CustomAuthenticationForm
     template_name = "registration/login.html"
 
+@method_decorator(csrf_exempt, name='dispatch')
 class UserEditView(generic.UpdateView):
     form_class = PerfilForm
     template_name = "registration/edit.html"
