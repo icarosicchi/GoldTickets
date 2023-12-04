@@ -287,6 +287,17 @@ input[type="search"] {
 #menu-btn {
   display: none;
   cursor: pointer;
+ margin-right: 10%;
+}
+}
+
+.logo-container {
+    width: 50%;
+}
+
+.logo-container img {
+    width: 100%;
+    height: auto;
 }
 
 @media only screen and (max-width: 768px) {
