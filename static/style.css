@@ -244,6 +244,12 @@ input[type="search"] {
   padding: 10px;
 }
 
+#menu-responsivo.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 #menu-responsivo img {
   width: 50%;
   height: auto;
