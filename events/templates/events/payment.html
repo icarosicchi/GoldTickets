@@ -17,10 +17,14 @@ Pagamento
       <hr>
       <li>Valor total da compra: R${{ total }}</li>
       <hr>
+      <li>Número(s) do(s) ticket(s):
+      {% for ticket in tickets_id %}
+      {{ ticket }},
+      {% endfor %}
     </ul>
   </section>
 
-<form method="post" enctype="multipart/form-data" action="{% url 'events:payment' event.id %}">
+<form method="post" action="{% url 'events:payment' event.id %}">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Finalizar Pagamento!</button>

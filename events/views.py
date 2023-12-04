@@ -11,6 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from urllib.parse import urlencode
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+import json
 
 @method_decorator(csrf_exempt, name='dispatch')
 class AuthorRequiredMixin(UserPassesTestMixin):
@@ -184,8 +185,9 @@ def get_tickets(request, event_id):
                         new_ticket = Ticket.objects.create(event=event, client=request.user, number=ticket_number, sold=True)
                         tickets_id.append(new_ticket.id)
                     tickets_id = {
-                        'tickets': tickets_id,
+                        "tickets": tickets_id,
                     }
+                    tickets_id = json.dumps(tickets_id)
                     url = reverse('events:payment', kwargs={'event_id': event_id}) + f'?{urlencode({"tickets_id": tickets_id})}'
                     return redirect(url)
                 else:
@@ -201,34 +203,54 @@ def ticket_detail(request, ticket_id):
 def payment(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     tickets_id = request.GET.get('tickets_id')
-    print("Tickets ID:", tickets_id)
-    form = PaymentForm(request.POST, request.FILES)
+    if tickets_id:
+        tickets_id = json.loads(tickets_id)
+        tickets_id = tickets_id['tickets']
+        tickets_amount = len(tickets_id)
+        tickets = []
+        payments = []
+        for id in tickets_id:
+            ticket = Ticket.objects.get(id=id)
+            payment = Payment.objects.create(tickets=ticket,tickets_amount=tickets_amount)
+            tickets.append(ticket)
+            payments.append(payment.id)
+    form = PaymentForm(request.POST)
     if request.method == 'POST':
-        form = PaymentForm(request.POST, request.FILES)
+        form = PaymentForm(request.POST)
         if form.is_valid():
-            uploaded_file = request.FILES.get('payment_voucher')
-            payment = form.save(commit=False)
-            payment = Payment(tickets=tickets_id,ticket_amount=len(tickets_id),payment_voucher=uploaded_file)
-            payment.save()
+            # uploaded_file = request.FILES.get('payment_voucher')
+            # tickets_amount = request.POST.get('tickets_amount')
+            # payment_id = request.POST.get('payments_id')
+            # payment = form.save(commit=False)
+            # payment = Payment(id=payment_id)
+            # payment.save()
+            # for i in range(payment_id):
+            #     payment = form.save(commit=False)
+            #     payment = Payment.objects.create(tickets=ticket,tickets_amount=ticket_amount)
+            #     payment.save()
             return redirect('events:paid', event_id)
         else:
             form = PaymentForm()
     if tickets_id:
         context = {
             'event': event,
-            'tickets_amount': len(tickets_id), 
-            'total':len(tickets_id)*event.price, 
+            'tickets_id': tickets_id,
+            'tickets_amount': tickets_amount, 
+            'total':tickets_amount*event.price,
+            'payments_id':payments[0],
             'form': form}
     else:
         context = {
             'event': event,
+            'tickets_id': [],
             'tickets_amount': 0, 
             'total':0.00, 
-        'form': form}
+            'form': form}
     return render(request, 'events/payment.html', context)
+
 
 def paid(request, event_id):
     event = get_object_or_404(Event, id=event_id)
-    return render(request, 'events/detail.html', {'event': event})
+    return render(request, 'events/paid.html', {'event': event})
 
     

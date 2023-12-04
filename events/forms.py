@@ -62,8 +62,10 @@ class PaymentForm(forms.ModelForm):
     class Meta:
         model = Payment
         fields = [
-            'payment_voucher',
+            # 'payment_voucher',
+            'tickets_amount',
         ]
         labels = {
-            'payment_voucher': 'Comprovante de pagamento PIX',
+            # 'payment_voucher': 'Comprovante de pagamento PIX',
+            'tickets_amount': 'Confirme a quantidade de ingressos'
         }
